@@ -27,6 +27,7 @@ export function AuthProvider({ children }) {
     currentUser,
   };
 
+  // Do not render the app until the user status is loaded
   return (
     <AuthContext.Provider value={value}>
       {!loading && children}

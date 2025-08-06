@@ -5,15 +5,14 @@ import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const ProtectedRoute = ({ children }) => {
-  // Get the current user from our AuthContext
   const { currentUser } = useAuth();
 
-  // If there is NO currentUser, redirect them to the /login page
   if (!currentUser) {
+    // If there's no user, redirect to the login page
     return <Navigate to="/login" />;
   }
 
-  // If there IS a currentUser, show them the page they were trying to access
+  // If there is a user, render the component they are trying to access
   return children;
 };
 
