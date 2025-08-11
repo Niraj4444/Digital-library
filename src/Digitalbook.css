@@ -1,0 +1,402 @@
+/* Digitalbook - Updated and Improved */
+
+/* --- 1. Global Styles & Variables --- */
+:root {
+  --primary-color: #D82E2F;
+  --secondary-color: #303952;
+  --light-gray: #f4f4f4;
+  --text-color: #333;
+  --white: #fff;
+  --border-color: #e0e0e0;
+  --muted-text-color: #6c757d;
+}
+
+body, h1, h2, h3, h4, h5, h6, button, input, textarea {
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  background-color: var(--light-gray);
+  color: var(--text-color);
+  margin: 0;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: opacity 0.3s;
+}
+
+a:hover {
+  opacity: 0.8;
+}
+
+/* --- 2. Layout & Grid System --- */
+.main-content {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.header-content {
+  max-width: 1500px;
+  margin: 20px auto 0;
+}
+
+.section {
+  padding: 16px 0;
+}
+
+.section-margin-top {
+  margin-top: 16px;
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -8px;
+}
+
+.grid-column {
+  padding: 0 8px;
+  box-sizing: border-box;
+  margin-bottom: 16px;
+}
+
+.grid-half {
+  width: 50%;
+}
+
+.flex-column-fill {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-column-fill > .grid {
+  flex-grow: 1;
+}
+
+.position-relative {
+  position: relative;
+}
+
+.position-absolute-middle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 600px;
+}
+
+.position-absolute-bottom-left {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  padding: 16px 24px;
+}
+
+/* --- 3. Component Styles --- */
+
+/* Navigation Bar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 24px;
+  background-color: var(--white);
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.brand-logo {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.nav-link {
+  font-size: 16px;
+  color: var(--secondary-color);
+  font-weight: 600;
+  padding: 8px;
+}
+
+.nav-link:hover {
+  color: var(--primary-color);
+  opacity: 1;
+}
+
+.nav-link .fas {
+  font-size: 20px;
+  color: var(--secondary-color);
+  transition: color 0.3s;
+}
+
+.nav-link:hover .fas {
+  color: var(--primary-color);
+}
+
+.btn-primary-nav {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  background-color: var(--primary-color);
+  color: var(--white);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.btn-primary-nav:hover {
+  background-color: #a82223;
+}
+.btn-primary-nav:active {
+  transform: scale(0.98);
+}
+
+
+/* Hero Section */
+.hero-image {
+  border-radius: 12px;
+}
+
+/* Tabs */
+.tab-bar {
+  display: flex;
+  background-color: #000;
+  border-radius: 8px 8px 0 0;
+}
+
+.tab-link {
+  flex-grow: 1;
+  padding: 12px 16px;
+  border: none;
+  background-color: inherit;
+  color: var(--white);
+  cursor: pointer;
+  text-align: center;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.tab-link:hover {
+  background-color: #333;
+}
+
+.tab-link.active {
+  background-color: var(--secondary-color);
+}
+
+.tab-content {
+  display: none;
+  background-color: var(--white);
+  padding: 24px;
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* Forms and Buttons */
+.form-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 16px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.form-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(216, 46, 47, 0.2);
+}
+textarea.form-input {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.btn {
+  display: inline-block;
+  padding: 12px 24px;
+  border: none;
+  color: var(--white);
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 16px;
+  transition: background-color 0.3s, transform 0.2s;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn-primary {
+  background-color: var(--secondary-color);
+}
+.btn-primary:hover {
+  background-color: var(--primary-color);
+}
+
+
+/* Book Cards (Image grid) */
+.book-card {
+  position: relative;
+  color: var(--white);
+  height: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.book-card img {
+    filter: brightness(0.8);
+    transition: filter 0.3s, transform 0.3s;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+.book-card:hover img {
+  filter: brightness(1);
+  transform: scale(1.05);
+}
+
+.book-name {
+  font-weight: 600;
+  font-size: 20px;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+}
+
+/* Content Cards (Books with text below) */
+.card {
+  background-color: var(--white);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.card .card-content {
+  padding: 16px 24px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.card .card-content .card-meta {
+  color: var(--muted-text-color);
+  font-size: 14px;
+}
+
+.card .btn {
+  margin-top: auto;
+}
+
+/* ======================================================== */
+/*  NEW STYLES ADDED FOR CONTACT FORM AND OTHER STANDALONE PAGES */
+/* ======================================================== */
+.content-card {
+  max-width: 700px;
+  margin: 4rem auto;
+  padding: 2.5rem;
+  background-color: var(--white);
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.content-card h2 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 2.2rem;
+  color: var(--text-color);
+}
+
+.content-card p {
+  color: var(--muted-text-color);
+  margin-bottom: 2.5rem;
+  font-size: 1.1rem;
+}
+/* ======================================================== */
+/*                      END OF NEW STYLES                   */
+/* ======================================================== */
+
+
+/* --- 4. Section Headings --- */
+.section h3 {
+  font-weight: 600;
+  margin-bottom: 4px;
+  font-size: 28px;
+}
+
+.section h3 + h6,
+.section h3 + p {
+  margin-top: 0;
+  margin-bottom: 24px;
+  color: var(--muted-text-color);
+  font-size: 1.1rem;
+}
+
+
+/* --- 5. Responsive Design --- */
+@media (max-width: 768px) {
+  .position-absolute-middle {
+    position: static;
+    transform: none;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .header-content {
+    margin-top: 0;
+  }
+
+  .hero-image {
+    display: none;
+  }
+
+  .tab-bar, .tab-content {
+    border-radius: 0;
+  }
+
+  .navbar {
+    padding: 12px 16px;
+  }
+
+  .nav-link {
+    font-size: 14px;
+    padding: 4px;
+  }
+
+  .navbar-actions {
+    gap: 8px;
+  }
+}
+
+@media (max-width: 600px) {
+  .grid-half {
+    width: 100%;
+  }
+}

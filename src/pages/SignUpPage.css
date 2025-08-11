@@ -1,0 +1,99 @@
+/* This styles the whole page background and centers the form */
+.signup-page-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f0f2f5; /* Light grey background like the image */
+  font-family: Arial, sans-serif;
+}
+
+/* This is the white card containing the form */
+.signup-form-card {
+  background-color: white;
+  padding: 2.5rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px; /* Limits the width of the form on larger screens */
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.signup-form-card h2 {
+  margin: 0 0 0.5rem 0;
+  font-size: 2rem;
+  color: #333;
+}
+
+.signup-form-card .subtitle {
+  margin: 0 0 2rem 0;
+  color: #666;
+}
+
+/* This is the container for each icon + input field */
+.input-group {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+/* This styles the icon inside the input field */
+.input-group span {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #aaa;
+}
+
+/* General styles for all input fields */
+.input-group input {
+  width: 100%;
+  padding: 15px 15px 15px 45px; /* Top/Right/Bottom/Left padding to make space for the icon */
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  box-sizing: border-box; /* Ensures padding doesn't affect the total width */
+  transition: border-color 0.2s;
+}
+
+/* Style for when the user clicks into an input field */
+.input-group input:focus {
+  outline: none;
+  border-color: #007bff; /* Highlight with blue border on focus */
+}
+
+/* The main blue "Sign Up" button */
+.signup-btn {
+  width: 100%;
+  padding: 15px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.signup-btn:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* The "Already have an account?" link at the bottom */
+.login-link {
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.login-link a {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.login-link a:hover {
+  text-decoration: underline;
+}

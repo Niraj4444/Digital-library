@@ -1,0 +1,99 @@
+/* This styles the whole page background and centers the form */
+.login-page-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f0f2f5; /* Light grey background */
+  font-family: Arial, sans-serif;
+}
+
+/* This is the white card containing the form */
+.login-form-card {
+  background-color: white;
+  padding: 2.5rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.login-form-card h2 {
+  margin: 0 0 0.5rem 0;
+  font-size: 2rem;
+  color: #333;
+}
+
+.login-form-card .subtitle {
+  margin: 0 0 2rem 0;
+  color: #666;
+}
+
+/* Container for each icon + input field */
+.input-group {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+/* Styles the icon inside the input field */
+.input-group span {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #aaa;
+}
+
+/* General styles for all input fields */
+.input-group input {
+  width: 100%;
+  padding: 15px 15px 15px 45px; /* Padding on the left for the icon */
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+
+/* Style for when the user clicks into an input field */
+.input-group input:focus {
+  outline: none;
+  border-color: #007bff; /* Blue highlight on focus */
+}
+
+/* The main blue "Log In" button */
+.login-btn {
+  width: 100%;
+  padding: 15px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.login-btn:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* The "Don't have an account yet?" link */
+.signup-link {
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.signup-link a {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.signup-link a:hover {
+  text-decoration: underline;
+}
