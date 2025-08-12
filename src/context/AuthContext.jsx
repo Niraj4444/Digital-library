@@ -1,16 +1,15 @@
 // src/context/AuthContext.jsx
-
 import React, { useContext, createContext, useState, useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebase";
 
-const AuthContext = createContext();
+const AuthContext = createContext({
+  currentUser: null,
+  loading: true,
+});
 
 export function useAuth() {
-  const context = useContext(AuthContext);
-  // --- ADD THIS LINE ---
-  console.log("useAuth called, context is:", context); 
-  return context;
+  return useContext(AuthContext);
 }
 
 export function AuthProvider({ children }) {
@@ -25,16 +24,11 @@ export function AuthProvider({ children }) {
     return unsubscribe;
   }, []);
 
-  const value = {
-    currentUser,
-  };
-
-  // --- ADD THIS LINE ---
-  console.log("AuthProvider rendering, value is:", value);
+  const value = { currentUser, loading };
 
   return (
     <AuthContext.Provider value={value}>
-      {!loading && children}
+      {children}
     </AuthContext.Provider>
   );
 }

@@ -1,28 +1,25 @@
 // src/App.jsx
 
 import React from 'react';
-// BrowserRouter is removed from here because it's in main.jsx now
-import { Routes, Route } from 'react-router-dom';
+// Make sure to import BrowserRouter here!
+import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
 import './Digitalbook.css';
 import './App.css';
 
-// --- Component Imports ---
+// ... (Your other component and page imports stay the same) ...
 import Navbar from './components/Navbar';
 import Header from './components/Header';
 import Books from './components/Books';
 import Popularbooks from './components/Popularbooks';
-
-// --- Page Imports ---
 import LoginPage from './pages/LoginPage';
 import ContactPage from './pages/ContactPage';
-import SignupPage from './pages/SignupPage'; // Matched your filename
-
-// --- NEW IMPORTS ---
+import SignupPage from './pages/SignupPage';
 import BookmarkPage from './pages/BookmarkPage';
 import UserProfilePage from './pages/UserProfilePage';
 import ProtectedRoute from './components/ProtectedRoute';
 
-// Component for the Home Page content (This stays the same)
+
+// Your HomePage and Layout components stay the same
 function HomePage() {
   return (
     <>
@@ -35,44 +32,40 @@ function HomePage() {
   );
 }
 
-// This is the main App component
-function App() {
-  // The <BrowserRouter> has been removed from here
+function Layout() {
   return (
     <>
       <Navbar />
       <main>
-        <Routes>
-          {/* --- Your existing public routes --- */}
-          <Route path="/" element={<HomePage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/contact" element={<ContactPage />} />
-          <Route path="/signup" element={<SignupPage />} />
-
-          {/* --- NEW PROTECTED ROUTES --- */}
-          {/* This route is for the user's bookmarks */}
-          <Route
-            path="/bookmark"
-            element={
-              <ProtectedRoute>
-                <BookmarkPage />
-              </ProtectedRoute>
-            }
-          />
-
-          {/* This route is for the user's profile */}
-          <Route
-            path="/user"
-            element={
-              <ProtectedRoute>
-                <UserProfilePage />
-              </ProtectedRoute>
-            }
-          />
-        </Routes>
+        <Outlet />
       </main>
     </>
   );
 }
 
-export default App;
+
+// Main App component
+export default function App() {
+  return (
+    // Wrap your entire Routes component in BrowserRouter
+    <BrowserRouter>
+      <Routes>
+        <Route element={<Layout />}>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+
+          <Route
+            path="/bookmark"
+            element={<ProtectedRoute><BookmarkPage /></ProtectedRoute>}
+          />
+          <Route
+            path="/user"
+            element={<ProtectedRoute><UserProfilePage /></ProtectedRoute>}
+          />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
+}
