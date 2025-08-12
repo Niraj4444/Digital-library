@@ -1,7 +1,8 @@
 // src/App.jsx
 
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+// BrowserRouter is removed from here because it's in main.jsx now
+import { Routes, Route } from 'react-router-dom';
 import './Digitalbook.css';
 import './App.css';
 
@@ -14,12 +15,14 @@ import Popularbooks from './components/Popularbooks';
 // --- Page Imports ---
 import LoginPage from './pages/LoginPage';
 import ContactPage from './pages/ContactPage';
-import SignupPage from './pages/SignupPage';
+import SignupPage from './pages/SignupPage'; // Matched your filename
 
-// REMOVED: The import for BookmarksPage is gone because the file doesn't exist.
-// REMOVED: The import for ProtectedRoute is also gone.
+// --- NEW IMPORTS ---
+import BookmarkPage from './pages/BookmarkPage';
+import UserProfilePage from './pages/UserProfilePage';
+import ProtectedRoute from './components/ProtectedRoute';
 
-// Component for the Home Page content
+// Component for the Home Page content (This stays the same)
 function HomePage() {
   return (
     <>
@@ -34,20 +37,41 @@ function HomePage() {
 
 // This is the main App component
 function App() {
+  // The <BrowserRouter> has been removed from here
   return (
-    <BrowserRouter>
+    <>
       <Navbar />
       <main>
         <Routes>
+          {/* --- Your existing public routes --- */}
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/signup" element={<SignupPage />} />
 
-          {/* REMOVED: The entire route for "/bookmarks" is deleted. */}
+          {/* --- NEW PROTECTED ROUTES --- */}
+          {/* This route is for the user's bookmarks */}
+          <Route
+            path="/bookmark"
+            element={
+              <ProtectedRoute>
+                <BookmarkPage />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* This route is for the user's profile */}
+          <Route
+            path="/user"
+            element={
+              <ProtectedRoute>
+                <UserProfilePage />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </main>
-    </BrowserRouter>
+    </>
   );
 }
 

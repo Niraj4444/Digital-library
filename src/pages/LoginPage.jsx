@@ -1,78 +1,39 @@
+// src/pages/LoginPage.jsx
+
 import React, { useState } from 'react';
-import './LoginPage.css'; // We will create this CSS file next
-import { Link } from 'react-router-dom'; // Use Link for internal navigation
+import { useNavigate } from 'react-router-dom';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../firebase';
 
-const LoginPage = () => {
-  // State to hold the values of the input fields
-  const [username, setUsername] = useState('');
+export default function LoginPage() {
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
-  // Function to handle form submission
-  const handleSubmit = (event) => {
-    event.preventDefault(); // Prevents the page from reloading on submit
-
-    // Basic validation
-    if (!username || !password) {
-      alert('Please enter both username and password.');
-      return;
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setError('');
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      navigate('/'); // Redirect to home page on success
+    } catch (err) {
+      setError(err.message);
+      console.error('Login failed:', err);
     }
-
-    // Since we are not using a real backend, we'll just log the data
-    console.log('Attempting to log in with:');
-    console.log('Username:', username);
-    console.log('Password:', password);
-
-    alert(`Welcome back, ${username}! (Simulated Login)`);
-
-    // Optionally, clear the form after submission
-    setUsername('');
-    setPassword('');
   };
 
+  // Your existing JSX form goes here. Just like the sign up page.
+
   return (
-    <div className="login-page-container">
-      <div className="login-form-card">
-        <form onSubmit={handleSubmit}>
-          <h2>Login</h2>
-          <p className="subtitle">Join our community today!</p>
-
-          <div className="input-group">
-            {/* Simple unicode character for the user icon */}
-            <span>👤</span>
-            <input
-              type="text"
-              placeholder="Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-            />
-          </div>
-
-          <div className="input-group">
-            {/* Simple unicode character for the lock icon */}
-            <span>🔒</span>
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-
-          <button type="submit" className="login-btn">
-            Log In
-          </button>
-        </form>
-
-        <p className="signup-link">
-          Don't have an account yet?{' '}
-          {/* Using <Link> is better for single-page-apps than <a> */}
-          <Link to="/signup">Sign up</Link>
-        </p>
-      </div>
+    <div>
+      <h1>Login</h1>
+      <form onSubmit={handleLogin}>
+        <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+        <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+        <button type="submit">Login</button>
+        {error && <p style={{ color: 'red' }}>{error}</p>}
+      </form>
     </div>
   );
-};
-
-export default LoginPage;
+}

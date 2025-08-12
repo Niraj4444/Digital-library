@@ -1,92 +1,49 @@
+// src/pages/SignUpPage.jsx
+
 import React, { useState } from 'react';
-import './SignUpPage.css'; // We will create this CSS file next
+import { useNavigate } from 'react-router-dom';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
+import { auth, db } from '../firebase'; // Import auth and db
 
-const SignUpPage = () => {
-  // State to hold the values of the input fields
-  const [username, setUsername] = useState('');
+export default function SignUpPage() {
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
-  // Function to handle form submission
-  const handleSubmit = (event) => {
-    event.preventDefault(); // Prevents the page from reloading
-
-    // Basic validation
-    if (!username || !password || !confirmPassword) {
-      alert('Please fill out all fields.');
-      return;
+  const handleSignUp = async (e) => {
+    e.preventDefault();
+    setError('');
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      // Create a document for the user in Firestore
+      await setDoc(doc(db, 'users', userCredential.user.uid), {
+        email: userCredential.user.email,
+        bookmarks: [], // Start with an empty bookmarks array
+      });
+      navigate('/'); // Redirect to home page on success
+    } catch (err) {
+      setError(err.message);
+      console.error('Sign up failed:', err);
     }
-    if (password !== confirmPassword) {
-      alert('Passwords do not match!');
-      return;
-    }
-
-    // If validation passes, you can "submit" the data.
-    // Since we are not using an API, we'll just log it to the console.
-    console.log('Account Created!');
-    console.log('Username:', username);
-    console.log('Password:', password);
-
-    alert(`Account for ${username} created successfully!`);
-
-    // Optionally, clear the form
-    setUsername('');
-    setPassword('');
-    setConfirmPassword('');
   };
 
+  // Your existing JSX form goes here. Just make sure:
+  // 1. The <form> has onSubmit={handleSignUp}
+  // 2. The email input has value={email} and onChange={(e) => setEmail(e.target.value)}
+  // 3. The password input has value={password} and onChange={(e) => setPassword(e.target.value)}
+  // 4. You display the {error} message somewhere if it's not empty.
+
   return (
-    <div className="signup-page-container">
-      <div className="signup-form-card">
-        <form onSubmit={handleSubmit}>
-          <h2>Create Account</h2>
-          <p className="subtitle">Join our community today!</p>
-
-          <div className="input-group">
-            {/* Using a simple unicode character for the icon */}
-            <span>👤</span>
-            <input
-              type="text"
-              placeholder="Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-            />
-          </div>
-
-          <div className="input-group">
-            <span>🔒</span>
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-
-          <div className="input-group">
-            <span>🔒</span>
-            <input
-              type="password"
-              placeholder="Confirm Password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-            />
-          </div>
-
-          <button type="submit" className="signup-btn">
-            Sign Up
-          </button>
-        </form>
-
-        <p className="login-link">
-          Already have an account? <a href="/login">Log In</a>
-        </p>
-      </div>
+    <div>
+      <h1>Sign Up</h1>
+      <form onSubmit={handleSignUp}>
+        <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+        <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+        <button type="submit">Sign Up</button>
+        {error && <p style={{ color: 'red' }}>{error}</p>}
+      </form>
     </div>
   );
-};
-
-export default SignUpPage;
+}

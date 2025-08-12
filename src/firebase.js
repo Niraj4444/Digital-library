@@ -1,13 +1,13 @@
-// Import the functions you need from the SDKs you need
+// src/firebase.js
+
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+// We need getAuth for login/signup and getFirestore to save user data
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
 // Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyCWriSNvJcTwaVdVtGiCMi273w0AJf4qBs",
+  apiKey: "AIzaSyCWrisNVjcTwaVdVtG1CMl273w0AJF4qBs", // Keep your own keys
   authDomain: "digital-library-b.firebaseapp.com",
   projectId: "digital-library-b",
   storageBucket: "digital-library-b.firebasestorage.app",
@@ -18,4 +18,7 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+
+// Initialize and export Firebase services
+export const auth = getAuth(app);
+export const db = getFirestore(app);
