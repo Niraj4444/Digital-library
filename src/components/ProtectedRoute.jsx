@@ -1,16 +1,14 @@
 // src/components/ProtectedRoute.jsx
-import React from 'react';
-import { Navigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { Navigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 export default function ProtectedRoute({ children }) {
-  const { currentUser } = useAuth();
+  const { currentUser, loading } = useAuth();
+
+  if (loading) return null; // or a loading spinner
 
   if (!currentUser) {
-    // If no user is logged in, redirect them to the login page
-    return <Navigate to="/login" />;
+    return <Navigate to="/login" replace />;
   }
-
-  // If a user is logged in, show the page they were trying to access
   return children;
 }

@@ -1,12 +1,9 @@
 // src/App.jsx
-
 import React from 'react';
-// Make sure to import BrowserRouter here!
 import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
 import './Digitalbook.css';
 import './App.css';
 
-// ... (Your other component and page imports stay the same) ...
 import Navbar from './components/Navbar';
 import Header from './components/Header';
 import Books from './components/Books';
@@ -17,9 +14,8 @@ import SignupPage from './pages/SignupPage';
 import BookmarkPage from './pages/BookmarkPage';
 import UserProfilePage from './pages/UserProfilePage';
 import ProtectedRoute from './components/ProtectedRoute';
+import { AuthProvider } from './context/AuthContext';
 
-
-// Your HomePage and Layout components stay the same
 function HomePage() {
   return (
     <>
@@ -43,29 +39,36 @@ function Layout() {
   );
 }
 
-
-// Main App component
 export default function App() {
   return (
-    // Wrap your entire Routes component in BrowserRouter
     <BrowserRouter>
-      <Routes>
-        <Route element={<Layout />}>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/contact" element={<ContactPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignupPage />} />
+      <AuthProvider>
+        <Routes>
+          <Route element={<Layout />}>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignupPage />} />
 
-          <Route
-            path="/bookmark"
-            element={<ProtectedRoute><BookmarkPage /></ProtectedRoute>}
-          />
-          <Route
-            path="/user"
-            element={<ProtectedRoute><UserProfilePage /></ProtectedRoute>}
-          />
-        </Route>
-      </Routes>
+            <Route
+              path="/bookmark"
+              element={
+                <ProtectedRoute>
+                  <BookmarkPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/user"
+              element={
+                <ProtectedRoute>
+                  <UserProfilePage />
+                </ProtectedRoute>
+              }
+            />
+          </Route>
+        </Routes>
+      </AuthProvider>
     </BrowserRouter>
   );
 }
