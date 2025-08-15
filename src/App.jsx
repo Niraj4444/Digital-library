@@ -15,6 +15,7 @@ import BookmarkPage from './pages/BookmarkPage';
 import UserProfilePage from './pages/UserProfilePage';
 import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider } from './context/AuthContext';
+import BookReaderPage from './pages/BookReaderPage'; // <-- 1. ADD THIS IMPORT
 
 function HomePage() {
   return (
@@ -49,6 +50,9 @@ export default function App() {
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
+
+            {/* 2. ADD THIS NEW ROUTE FOR THE BOOK READER */}
+            <Route path="/read/:bookId" element={<BookReaderPage />} />
 
             <Route
               path="/bookmark"
