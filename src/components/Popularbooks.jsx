@@ -37,7 +37,17 @@ function Popularbooks() {
       alert("Please login to bookmark books.");
       return;
     }
-    await addBookmark(currentUser.uid, book);
+
+    // ✅ normalize fields so BookmarkPage can always render them
+    const bookmarkData = {
+      id: book.id,
+      title: book.title,
+      image: book.coverImageURL || fallbackImage,
+      description: book.description || "No description available.",
+      meta: book.meta || "Book",
+    };
+
+    await addBookmark(currentUser.uid, bookmarkData);
     alert(`${book.title} added to bookmarks!`);
   };
 
