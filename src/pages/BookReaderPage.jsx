@@ -40,7 +40,11 @@ function BookReaderPage() {
   const isPdf = book.bookFileURL.toLowerCase().includes('.pdf') || book.bookFileURL.includes("drive.google.com");
   const isEpub = book.bookFileURL.toLowerCase().endsWith('.epub');
 
-  // Always convert Google Drive link into preview link
+  // Always use GitHub raw link for downloads
+  const githubDownloadUrl =
+    "https://raw.githubusercontent.com/Niraj4444/Digital-library/main/public/books/Serious_Python_-_Julien_Danjou.pdf";
+
+  // Preview URL stays same (Google Drive preview / direct PDF)
   let previewUrl = book.bookFileURL;
   if (book.bookFileURL.includes("drive.google.com")) {
     const match = book.bookFileURL.match(/\/d\/(.*?)(\/|$|\?)/);
@@ -51,12 +55,12 @@ function BookReaderPage() {
   }
 
   return (
-    <div style={{ height: '100vh', padding: '20px' }}>
+    <div style={{ height: '100vh', padding: '20px', display: 'flex', flexDirection: 'column' }}>
       <h2>Reading: {book.title}</h2>
 
       {/* PDF or Google Drive preview */}
       {isPdf && (
-        <div style={{ marginTop: '20px', height: '85%' }}>
+        <div style={{ flex: 1, marginTop: '20px' }}>
           <iframe 
             src={previewUrl} 
             title={book.title}
@@ -70,7 +74,7 @@ function BookReaderPage() {
 
       {/* EPUB Viewer */}
       {isEpub && (
-        <div style={{ height: '85%' }}>
+        <div style={{ flex: 1 }}>
           <ReactReader
             url={book.bookFileURL}
             title={book.title}
@@ -79,6 +83,18 @@ function BookReaderPage() {
           />
         </div>
       )}
+
+      {/* Big centered Download button */}
+      <div className="flex flex-col items-center mt-6">
+        <h3 className="text-xl font-semibold mb-3">Download Book</h3>
+        <a
+          href={githubDownloadUrl}
+          download="Serious_Python_-_Julien_Danjou.pdf"
+          className="px-10 py-4 bg-blue-600 text-white text-lg font-bold rounded-xl shadow-lg hover:bg-blue-700 transition"
+        >
+          ⬇️ Download Book
+        </a>
+      </div>
     </div>
   );
 }
