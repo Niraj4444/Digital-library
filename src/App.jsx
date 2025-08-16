@@ -1,11 +1,12 @@
 // src/App.jsx
 import React from "react";
-import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Outlet, useLocation } from "react-router-dom";
 import "./Digitalbook.css";
 import "./App.css";
 
 import Navbar from "./components/Navbar";
 import Header from "./components/Header";
+import Books from "./components/Books";
 import Popularbooks from "./components/Popularbooks";
 import LoginPage from "./pages/LoginPage";
 import ContactPage from "./pages/ContactPage";
@@ -15,15 +16,35 @@ import UserProfilePage from "./pages/UserProfilePage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { AuthProvider } from "./context/AuthContext";
 import BookReaderPage from "./pages/BookReaderPage";
-import SearchResultsPage from "./pages/SearchResultsPage"; // 🔎 NEW
+
+// --- Utility: parse query params
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
 
 // Homepage layout
 function HomePage() {
   return (
     <>
-      <Header /> {/* Global search bar */}
+      <Header />
       <div className="main-content">
-        <Popularbooks /> {/* Firestore-powered books */}
+        <Books searchQuery="" /> {/* Show all local+Firestore books */}
+        <Popularbooks />        {/* Firestore-powered books */}
+      </div>
+    </>
+  );
+}
+
+// Search Results Page (new)
+function SearchResultsPage() {
+  const query = useQuery();
+  const searchQuery = query.get("query") || "";
+
+  return (
+    <>
+      <Header />
+      <div className="main-content">
+        <Books searchQuery={searchQuery} />
       </div>
     </>
   );
