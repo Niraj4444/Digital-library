@@ -4,18 +4,22 @@ import { useLocation, Link } from "react-router-dom";
 import { db } from "../firebase";
 import { collection, getDocs } from "firebase/firestore";
 
+// Static demo books (local only)
 const staticBooks = [
   { title: "House of the Dragon", image: "/images/Ice&f.jpg" },
   { title: "Fluent Python", image: "/images/FluentPy.jpg" },
   { title: "The Lord of the Rings", image: "/images/rings.jpg" },
 ];
 
+// Default fallback image (put one in public/images/default-book.jpg)
+const fallbackImage = "/images/default-book.jpg";
+
 function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
 
 function SearchResultsPage() {
-  const query = (useQuery().get("query") || "").toLowerCase();
+  const query = (useQuery().get("query") || "").toLowerCase().trim();
   const [firestoreBooks, setFirestoreBooks] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -23,12 +27,13 @@ function SearchResultsPage() {
   useEffect(() => {
     const fetchBooks = async () => {
       try {
-        const booksCollectionRef = collection(db, "books");
+        const booksCollectionRef = collection(db, "books"); // 👈 check this name matches your Firestore
         const snapshot = await getDocs(booksCollectionRef);
         const list = snapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
+        console.log("All Firestore books:", list); // 🔎 Debug
         setFirestoreBooks(list);
       } catch (error) {
         console.error("Error fetching books:", error);
@@ -39,7 +44,7 @@ function SearchResultsPage() {
     fetchBooks();
   }, []);
 
-  // Normalize search
+  // Normalize search for case-insensitive matching
   const normalize = (str) => (str || "").toLowerCase().trim();
 
   // Filter static + firestore books
@@ -49,6 +54,9 @@ function SearchResultsPage() {
   const firestoreResults = firestoreBooks.filter((b) =>
     normalize(b.title).includes(query)
   );
+
+  console.log("Query:", query);
+  console.log("Firestore matches:", firestoreResults); // 🔎 Debug
 
   const allResults = [...staticResults, ...firestoreResults];
 
@@ -67,7 +75,11 @@ function SearchResultsPage() {
               <div className="grid-half grid-column" key={`fs-${book.id}`}>
                 <Link to={`/read/${book.id}`} className="book-card-link">
                   <div className="book-card">
-                    <img src={book.coverImageURL} alt={book.title} />
+                    <img
+                      src={book.coverImageURL || fallbackImage}
+                      alt={book.title}
+                      onError={(e) => (e.target.src = fallbackImage)}
+                    />
                     <span className="position-absolute-bottom-left destination-name">
                       {book.title}
                     </span>
@@ -78,7 +90,11 @@ function SearchResultsPage() {
               // Static book → just show card
               <div className="grid-half grid-column" key={`st-${i}`}>
                 <div className="book-card">
-                  <img src={book.image} alt={book.title} />
+                  <img
+                    src={book.image || fallbackImage}
+                    alt={book.title}
+                    onError={(e) => (e.target.src = fallbackImage)}
+                  />
                   <span className="position-absolute-bottom-left destination-name">
                     {book.title}
                   </span>

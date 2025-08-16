@@ -3,7 +3,10 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../firebase'; 
 import { collection, getDocs } from 'firebase/firestore';
-import { Link } from 'react-router-dom'; // <-- IMPORT LINK
+import { Link } from 'react-router-dom'; 
+
+// Default fallback image (put this in public/images/default-book.jpg)
+const fallbackImage = "/images/default-book.jpg";
 
 function Popularbooks() {
   const [books, setBooks] = useState([]);
@@ -41,11 +44,16 @@ function Popularbooks() {
       <div className="grid">
         {books.map((book) => (
           <div className="grid-half grid-column" key={book.id}>
-            {/* THIS IS THE CHANGED LINE */}
             <Link to={`/read/${book.id}`} className="book-card-link">
               <div className="book-card">
-                <img src={book.coverImageURL} alt={book.title} />
-                <span className="position-absolute-bottom-left destination-name">{book.title}</span>
+                <img
+                  src={book.coverImageURL || fallbackImage}
+                  alt={book.title}
+                  onError={(e) => (e.target.src = fallbackImage)}
+                />
+                <span className="position-absolute-bottom-left destination-name">
+                  {book.title}
+                </span>
               </div>
             </Link>
           </div>
