@@ -1,16 +1,17 @@
 // src/components/Popularbooks.jsx
-
 import React, { useState, useEffect } from 'react';
 import { db } from '../firebase'; 
 import { collection, getDocs } from 'firebase/firestore';
 import { Link } from 'react-router-dom'; 
+import { useAuth } from "../context/AuthContext";
+import { addBookmark } from "../services/bookmarkService";
 
-// Default fallback image (put this in public/images/default-book.jpg)
 const fallbackImage = "/images/default-book.jpg";
 
 function Popularbooks() {
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { currentUser } = useAuth();
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -31,6 +32,15 @@ function Popularbooks() {
     fetchBooks();
   }, []);
 
+  const handleBookmark = async (book) => {
+    if (!currentUser) {
+      alert("Please login to bookmark books.");
+      return;
+    }
+    await addBookmark(currentUser.uid, book);
+    alert(`${book.title} added to bookmarks!`);
+  };
+
   if (loading) {
     return <div className="section">Loading books...</div>;
   }
@@ -44,18 +54,28 @@ function Popularbooks() {
       <div className="grid">
         {books.map((book) => (
           <div className="grid-half grid-column" key={book.id}>
-            <Link to={`/read/${book.id}`} className="book-card-link">
-              <div className="book-card">
-                <img
-                  src={book.coverImageURL || fallbackImage}
-                  alt={book.title}
-                  onError={(e) => (e.target.src = fallbackImage)}
-                />
-                <span className="position-absolute-bottom-left destination-name">
-                  {book.title}
-                </span>
-              </div>
-            </Link>
+            <div className="card">
+              <Link to={`/read/${book.id}`} className="book-card-link">
+                <div className="book-card">
+                  <img
+                    src={book.coverImageURL || fallbackImage}
+                    alt={book.title}
+                    onError={(e) => (e.target.src = fallbackImage)}
+                  />
+                  <span className="position-absolute-bottom-left destination-name">
+                    {book.title}
+                  </span>
+                </div>
+              </Link>
+              {currentUser && (
+                <button
+                  className="btn btn-primary"
+                  onClick={() => handleBookmark(book)}
+                >
+                  Bookmark
+                </button>
+              )}
+            </div>
           </div>
         ))}
       </div>

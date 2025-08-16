@@ -1,9 +1,11 @@
 // src/components/Books.jsx
 import React from "react";
+import { useAuth } from "../context/AuthContext";
+import { addBookmark } from "../services/bookmarkService";
 
-// Local demo data only
 const localBooksData = [
   {
+    id: "house-dragon", // add unique IDs for bookmarks
     image: "/images/Ice&f.jpg",
     alt: "House of the Dragon",
     title: "House of the Dragon Bundle",
@@ -11,13 +13,15 @@ const localBooksData = [
     description: "Enjoy the books from the popular series.",
   },
   {
+    id: "fluent-python",
     image: "/images/Py3.jpg",
     alt: "Python Programming",
-    title: "Fluent Python", // ✅ corrected name
+    title: "Fluent Python",
     meta: "Free for beginners",
     description: "Learn from the best-of-the-best books.",
   },
   {
+    id: "lotr",
     image: "/images/rings.jpg",
     alt: "Lord of the Rings",
     title: "The Lord of the Rings",
@@ -27,7 +31,17 @@ const localBooksData = [
 ];
 
 function Books({ searchQuery }) {
-  // Filter based on search
+  const { currentUser } = useAuth();
+
+  const handleBookmark = async (book) => {
+    if (!currentUser) {
+      alert("Please login to bookmark books.");
+      return;
+    }
+    await addBookmark(currentUser.uid, book);
+    alert(`${book.title} added to bookmarks!`);
+  };
+
   const filteredBooks = searchQuery
     ? localBooksData.filter((book) =>
         book.title.toLowerCase().includes(searchQuery.toLowerCase())
@@ -44,7 +58,7 @@ function Books({ searchQuery }) {
       <div className="grid">
         {filteredBooks.length > 0 ? (
           filteredBooks.map((book, index) => (
-            <div className="grid-half grid-column" key={index}>
+            <div className="grid-half grid-column" key={book.id}>
               <div className="card">
                 <img src={book.image} alt={book.alt} />
                 <div className="card-content">
@@ -52,6 +66,14 @@ function Books({ searchQuery }) {
                   <p className="card-meta">{book.meta}</p>
                   <p>{book.description}</p>
                   <button className="btn btn-primary">View Book Details</button>
+                  {currentUser && (
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => handleBookmark(book)}
+                    >
+                      Bookmark
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
