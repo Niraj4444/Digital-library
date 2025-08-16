@@ -4,6 +4,7 @@ hidden = [".config", "package-lock.json"]
 
 [nix]
 channel = "stable-25_05"
+packages = ["firebase-tools"]
 
 [unitTest]
 language = "nodejs"
