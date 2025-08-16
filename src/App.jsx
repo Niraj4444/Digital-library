@@ -1,34 +1,35 @@
 // src/App.jsx
-import React from 'react';
-import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
-import './Digitalbook.css';
-import './App.css';
+import React from "react";
+import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
+import "./Digitalbook.css";
+import "./App.css";
 
-import Navbar from './components/Navbar';
-import Header from './components/Header';
-import Books from './components/Books';
-import Popularbooks from './components/Popularbooks';
-import LoginPage from './pages/LoginPage';
-import ContactPage from './pages/ContactPage';
-import SignupPage from './pages/SignupPage';
-import BookmarkPage from './pages/BookmarkPage';
-import UserProfilePage from './pages/UserProfilePage';
-import ProtectedRoute from './components/ProtectedRoute';
-import { AuthProvider } from './context/AuthContext';
-import BookReaderPage from './pages/BookReaderPage'; // <-- 1. ADD THIS IMPORT
+import Navbar from "./components/Navbar";
+import Header from "./components/Header";
+import Popularbooks from "./components/Popularbooks";
+import LoginPage from "./pages/LoginPage";
+import ContactPage from "./pages/ContactPage";
+import SignupPage from "./pages/SignupPage";
+import BookmarkPage from "./pages/BookmarkPage";
+import UserProfilePage from "./pages/UserProfilePage";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { AuthProvider } from "./context/AuthContext";
+import BookReaderPage from "./pages/BookReaderPage";
+import SearchResultsPage from "./pages/SearchResultsPage"; // 🔎 NEW
 
+// Homepage layout
 function HomePage() {
   return (
     <>
-      <Header />
+      <Header /> {/* Global search bar */}
       <div className="main-content">
-        <Books />
-        <Popularbooks />
+        <Popularbooks /> {/* Firestore-powered books */}
       </div>
     </>
   );
 }
 
+// Shared layout with navbar
 function Layout() {
   return (
     <>
@@ -46,14 +47,17 @@ export default function App() {
       <AuthProvider>
         <Routes>
           <Route element={<Layout />}>
+            {/* Public routes */}
             <Route path="/" element={<HomePage />} />
+            <Route path="/search" element={<SearchResultsPage />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
 
-            {/* 2. ADD THIS NEW ROUTE FOR THE BOOK READER */}
+            {/* Book reader */}
             <Route path="/read/:bookId" element={<BookReaderPage />} />
 
+            {/* Protected routes */}
             <Route
               path="/bookmark"
               element={
