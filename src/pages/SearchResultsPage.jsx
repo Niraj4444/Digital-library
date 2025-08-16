@@ -7,7 +7,7 @@ import { collection, getDocs } from "firebase/firestore";
 const staticBooks = [
   { title: "House of the Dragon", image: "/images/Ice&f.jpg" },
   { title: "Fluent Python", image: "/images/FluentPy.jpg" },
-  { title: "Serious Python", image: "/images/Py3.jpg" },
+  { title: "The Lord of the Rings", image: "/images/rings.jpg" },
 ];
 
 function useQuery() {
@@ -39,12 +39,15 @@ function SearchResultsPage() {
     fetchBooks();
   }, []);
 
+  // Normalize search
+  const normalize = (str) => (str || "").toLowerCase().trim();
+
   // Filter static + firestore books
   const staticResults = staticBooks.filter((b) =>
-    b.title.toLowerCase().includes(query)
+    normalize(b.title).includes(query)
   );
   const firestoreResults = firestoreBooks.filter((b) =>
-    b.title.toLowerCase().includes(query)
+    normalize(b.title).includes(query)
   );
 
   const allResults = [...staticResults, ...firestoreResults];
