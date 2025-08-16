@@ -1,15 +1,18 @@
 // src/pages/BookReaderPage.jsx
 
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { db } from '../firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { ReactReader } from 'react-reader';
 
 function BookReaderPage() {
-  const { bookId } = useParams(); 
-  const [book, setBook] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const { bookId } = useParams();
+  const location = useLocation();
+  const bookFromState = location.state?.book;
+
+  const [book, setBook] = useState(bookFromState || null);
+  const [loading, setLoading] = useState(!bookFromState);
 
   useEffect(() => {
     const fetchBook = async () => {
@@ -18,9 +21,9 @@ function BookReaderPage() {
         const docSnap = await getDoc(bookDocRef);
 
         if (docSnap.exists()) {
-          setBook(docSnap.data());
+          setBook({ id: docSnap.id, ...docSnap.data() });
         } else {
-          console.log("No such document!");
+          console.log("No such document in Firestore!");
         }
       } catch (error) {
         console.error("Error fetching book:", error);
@@ -29,24 +32,24 @@ function BookReaderPage() {
       }
     };
 
-    if (bookId) {
+    if (!bookFromState && bookId) {
       fetchBook();
     }
-  }, [bookId]);
+  }, [bookId, bookFromState]);
 
   if (loading) return <div>Loading book...</div>;
   if (!book) return <div>Book not found.</div>;
 
-  const isPdf = book.bookFileURL.toLowerCase().includes('.pdf') || book.bookFileURL.includes("drive.google.com");
-  const isEpub = book.bookFileURL.toLowerCase().endsWith('.epub');
+  const isPdf = book.bookFileURL?.toLowerCase().includes('.pdf') || book.bookFileURL?.includes("drive.google.com");
+  const isEpub = book.bookFileURL?.toLowerCase().endsWith('.epub');
 
-  // Always use GitHub raw link for downloads
+  // Always use GitHub raw link for Serious Python (fallback)
   const githubDownloadUrl =
     "https://raw.githubusercontent.com/Niraj4444/Digital-library/main/public/books/Serious_Python_-_Julien_Danjou.pdf";
 
   // Preview URL stays same (Google Drive preview / direct PDF)
   let previewUrl = book.bookFileURL;
-  if (book.bookFileURL.includes("drive.google.com")) {
+  if (book.bookFileURL?.includes("drive.google.com")) {
     const match = book.bookFileURL.match(/\/d\/(.*?)(\/|$|\?)/);
     if (match && match[1]) {
       const fileId = match[1];
@@ -88,8 +91,8 @@ function BookReaderPage() {
       <div className="flex flex-col items-center mt-6">
         <h3 className="text-xl font-semibold mb-3">Download Book</h3>
         <a
-          href={githubDownloadUrl}
-          download="Serious_Python_-_Julien_Danjou.pdf"
+          href={book.bookFileURL || githubDownloadUrl}
+          download={book.title || "book.pdf"}
           className="px-10 py-4 bg-blue-600 text-white text-lg font-bold rounded-xl shadow-lg hover:bg-blue-700 transition"
         >
           ⬇️ Download Book
