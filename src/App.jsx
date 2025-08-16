@@ -28,14 +28,17 @@ function HomePage() {
     <>
       <Header />
       <div className="main-content">
-        <Books searchQuery="" /> {/* Show all local+Firestore books */}
-        <Popularbooks />        {/* Firestore-powered books */}
+        {/* Local or static books (optional) */}
+        <Books searchQuery="" />
+
+        {/* Firestore-powered books with categories */}
+        <Popularbooks />
       </div>
     </>
   );
 }
 
-// Search Results Page (new)
+// Search Results Page
 function SearchResultsPage() {
   const query = useQuery();
   const searchQuery = query.get("query") || "";
